@@ -1,27 +1,33 @@
 import React, { useEffect, useRef } from 'react';
 import { View, Animated, StyleSheet } from 'react-native';
+import { useRouter } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 
-export default function App() {
+export default function Index() {
     const fadeAnim = useRef(new Animated.Value(0)).current;
+    const router = useRouter();
 
     useEffect(() => {
         const initializeApp = async () => {
-            // Await until the splash screen has finished loading
-            await SplashScreen.preventAutoHideAsync();
-            // Start the fade-in animation for the Melin logo
+            // Ensures the splash screen is hides automatically
+            await SplashScreen.hideAsync();
+
+            // Start the fade-in animation for Melin logo
             Animated.timing(fadeAnim, {
                 toValue: 1,
-                duration: 5000, 
+                duration: 3000,
                 useNativeDriver: true,
             }).start();
-            // Hide the splash screen once the animation begins
-            await SplashScreen.hideAsync();
+
+            // Navigate to `(tabs)/home` after 3 seconds
+            setTimeout(() => {
+                router.replace('(tabs)/home');
+            }, 3000);
         };
 
-        // Call the initializeApp function to initialize the app and handle the splash screen
+        // Call the initializeApp function
         initializeApp();
-    }, [fadeAnim]);
+    }, [fadeAnim, router]);
 
     return (
         <View style={styles.container}>
@@ -42,7 +48,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     logo: {
-        width: 200,
-        height: 200,
+        width: 150,
+        height: 150,
     },
 });
